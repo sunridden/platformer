@@ -2,19 +2,23 @@ import sys
 
 import pygame
 
-pygame.init()
+class Game:
+    def __init__(self):
+        pygame.init()
 
-pygame.display.set_caption('Platformer')
+        pygame.display.set_caption('Platformer')
+        self.screen = pygame.display.set_mode((640, 480)) # creates window with resolution
 
-screen = pygame.display.set_mode((640, 480)) # creates window with resolution
+        self.clock = pygame.time.Clock()
 
-clock = pygame.time.Clock()
+    def run(self):
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
 
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
+            pygame.display.update()
+            self.clock.tick(60) # 60fps
 
-    pygame.display.update()
-    clock.tick(60) # 60fps
+Game().run()
