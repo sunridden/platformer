@@ -2,6 +2,7 @@ import sys
 
 import pygame
 
+from scripts.utils import load_image
 from scripts.entities import PhysicsEntity
 
 class Game:
@@ -15,6 +16,10 @@ class Game:
 
         self.movement = [False, False]
 
+        self.assets = {
+            'player': load_image('entities/player.png')
+        }
+
         self.player = PhysicsEntity(self, 'player', (50, 50), (8,15)) #initializes 'player' from PhysicsEntity class with type, position, and size
 
     def run(self):
@@ -22,6 +27,7 @@ class Game:
             self.screen.fill((14, 219, 248))
     
             self.player.update((self.movement[1] - self.movement[0], 0)) # changes player horizontal position based on inputs
+            self.player.render(self.screen)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
