@@ -2,6 +2,8 @@ import sys
 
 import pygame
 
+from scripts.entities import PhysicsEntity
+
 class Game:
     def __init__(self):
         pygame.init()
@@ -11,42 +13,29 @@ class Game:
 
         self.clock = pygame.time.Clock()
 
-        self.img = pygame.image.load('data/images/clouds/cloud_1.png')
-        self.img.set_colorkey((0,0,0)) # replaces color with transparency
+        self.movement = [False, False]
 
-        self.img_pos = [160, 260]
-        self.movement = [False, False]; # Booleans represent if up or down key is being held
-
-        self.collision_area = pygame.Rect(50, 50, 300, 50)
+        self.player = PhysicsEntity(self, 'player', (50, 50), (8,15)) #initializes 'player' from PhysicsEntity class with type, position, and size
 
     def run(self):
         while True:
             self.screen.fill((14, 219, 248))
-            
-            img_r = pygame.Rect(self.img_pos[0], self.img_pos[1], self.img.get_width(), self.img.get_height()) # collision 'box' follows surface position
-
-            if (img_r.colliderect(self.collision_area)):
-                pygame.draw.rect(self.screen, (0, 100, 255), self.collision_area)
-            else:
-                pygame.draw.rect(self.screen, (0, 50, 255), self.collision_area)
-
-            # startng position [0,0] is at top left corner
-            self.img_pos[1] += (self.movement[1] - self.movement[0]) * 5 # Booleans convert to a 1 - True or 0 - False
-            self.screen.blit(self.img, self.img_pos) # displays image on 'window'
+    
+            self.player.update((self.movement[1] - self.movement[0], 0)) # changes player horizontal position based on inputs
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_UP:
+                    if event.key == pygame.K_LEFT:
                         self.movement[0] = True
-                    if event.key == pygame.K_DOWN:
+                    if event.key == pygame.K_RIGHT:
                         self.movement[1] = True
                 if event.type == pygame.KEYUP:
-                    if event.key == pygame.K_UP:
+                    if event.key == pygame.K_LEFT:
                         self.movement[0] = False
-                    if event.key == pygame.K_DOWN:
+                    if event.key == pygame.K_RIGHT:
                         self.movement[1] = False
 
             pygame.display.update()
