@@ -11,6 +11,7 @@ class Game:
 
         pygame.display.set_caption('Platformer')
         self.screen = pygame.display.set_mode((640, 480)) # creates window with set resolution
+        self.display = pygame.Surface((320, 240)) # surface to be scaled to window size
 
         self.clock = pygame.time.Clock()
 
@@ -24,10 +25,10 @@ class Game:
 
     def run(self):
         while True:
-            self.screen.fill((14, 219, 248))
+            self.display.fill((14, 219, 248))
     
             self.player.update((self.movement[1] - self.movement[0], 0)) # changes player horizontal position based on inputs
-            self.player.render(self.screen)
+            self.player.render(self.display) # renders player sprite on 'display' to be scaled
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -44,6 +45,7 @@ class Game:
                     if event.key == pygame.K_RIGHT:
                         self.movement[1] = False
 
+            self.screen.blit(pygame.transform.scale(self.display, self.screen.get_size()), (0, 0)) # scales 'display' to 'screen' thus also scaling player sprite 
             pygame.display.update()
             self.clock.tick(60) # 60fps
 
